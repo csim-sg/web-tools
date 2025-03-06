@@ -1,4 +1,4 @@
-import BarcodeGenerator from '@/components/BarcodeGenerator';
+import BarcodeGenerator from '../../../components/BarcodeGenerator';
 
 export default function QRCode() {
   return (

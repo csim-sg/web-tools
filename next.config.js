@@ -1,12 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  webpack: (config) => {
-    config.resolve.fallback = {
-      ...config.resolve.fallback,
-      fs: false,
-      path: false,
-      crypto: false,
-    };
+  reactStrictMode: true,
+  swcMinify: true,
+  images: {
+    domains: [],
+  },
+  webpack(config) {
     return config;
   },
   // Add cross-origin isolation headers

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useTheme } from 'next-themes';
+import { ToolLayout } from '../components/ToolLayout';
 
 const tools = [
   {
