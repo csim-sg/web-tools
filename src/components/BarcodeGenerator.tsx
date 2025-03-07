@@ -1,12 +1,11 @@
 'use client';
 import { useState } from 'react';
-import { useTheme } from 'next-themes';
 import Image from 'next/image';
 import * as z from 'zod';
 import { FormWrapper } from './ui/form-wrapper';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
-import { Slider } from './ui/slider';
+import { Slider } from '@/components/ui/slider';
 import { showToast } from '@/lib/utils/toast';
 import {
   Card,
@@ -15,13 +14,21 @@ import {
   CardHeader,
   CardTitle,
 } from './ui/card';
-import { Label } from './ui/label';
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+  FormDescription,
+} from './ui/form';
 
 const barcodeSchema = z.object({
   content: z.string().min(1, 'Content is required'),
   size: z.number().min(100).max(400),
   color: z.string(),
   backgroundColor: z.string(),
+  logo: z.string().optional(),
 });
 
 type BarcodeFormValues = z.infer<typeof barcodeSchema>;
@@ -44,13 +51,13 @@ export default function BarcodeGenerator({
   maxLength = 100,
 }: BarcodeGeneratorProps) {
   const [barcodeUrl, setBarcodeUrl] = useState('');
-  const { theme } = useTheme();
 
   const defaultValues: BarcodeFormValues = {
     content: '',
     size: 200,
     color: '#000000',
     backgroundColor: '#FFFFFF',
+    logo: '',
   };
 
   const generateBarcode = async (values: BarcodeFormValues) => {
@@ -72,6 +79,7 @@ export default function BarcodeGenerator({
           size: values.size,
           color: values.color,
           backgroundColor: values.backgroundColor,
+          logo: values.logo || undefined,
         }),
       });
 
@@ -82,7 +90,7 @@ export default function BarcodeGenerator({
       const blob = await response.blob();
       setBarcodeUrl(URL.createObjectURL(blob));
       showToast('Barcode generated successfully', 'success');
-    } catch (err) {
+    } catch {
       showToast('Failed to generate barcode', 'error', {
         description: 'Please try again later',
       });
@@ -148,7 +156,7 @@ export default function BarcodeGenerator({
                           max={400}
                           step={1}
                           value={[field.value]}
-                          onValueChange={(value) => field.onChange(value[0])}
+                          onValueChange={(value: number[]) => field.onChange(value[0])}
                         />
                       </FormControl>
                       <FormDescription>
@@ -157,6 +165,29 @@ export default function BarcodeGenerator({
                     </FormItem>
                   )}
                 />
+
+                {type === 'qr' && (
+                  <FormField
+                    control={form.control}
+                    name="logo"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Logo URL (optional)</FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            type="url"
+                            placeholder="Enter logo URL"
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          URL of the logo to place in the center of the QR code
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
 
                 <div className="grid grid-cols-2 gap-4">
                   <FormField
@@ -211,8 +242,8 @@ export default function BarcodeGenerator({
                 <Image
                   src={barcodeUrl}
                   alt="Generated Barcode"
-                  width={form.getValues('size')}
-                  height={form.getValues('size')}
+                  width={200}
+                  height={200}
                   className="max-w-full h-auto"
                 />
                 <Button
@@ -233,4 +264,4 @@ export default function BarcodeGenerator({
       </CardContent>
     </Card>
   );
-} 
+}
