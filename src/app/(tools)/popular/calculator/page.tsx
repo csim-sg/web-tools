@@ -3,8 +3,6 @@ import { useState } from 'react';
 import { Metadata } from 'next';
 import { generateMetadata } from '@/lib/utils/metadata';
 
-export const metadata: Metadata = generateMetadata('/utilities/calculator');
-
 export default function Calculator() {
   const [display, setDisplay] = useState('0');
   const [equation, setEquation] = useState('');

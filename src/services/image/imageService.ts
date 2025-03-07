@@ -1,4 +1,4 @@
-import { ImageFormat } from '@/lib/types/image';
+import { ImageFormat } from "@/lib/types/image";
 
 export interface ImageConvertOptions {
   format: ImageFormat;
@@ -64,7 +64,7 @@ export const imageService = {
     return response.blob();
   },
 
-  async batchResize(files: File[], options: BatchResizeOptions): Promise<Blob[]> {
+  async batchResize(files: File[], options: BatchResizeOptions): Promise<Blob> {
     const formData = new FormData();
     files.forEach(file => formData.append('files', file));
     formData.append('width', options.width.toString());

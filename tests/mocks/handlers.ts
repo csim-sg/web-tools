@@ -31,5 +31,13 @@ export const handlers = [
     );
   }),
 
+  // Add your API mocks here
+  rest.get('/api/example', (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json({ message: 'Mocked response' })
+    );
+  }),
+
   // ... add more API mocks as needed
 ]; 

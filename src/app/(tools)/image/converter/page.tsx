@@ -8,12 +8,10 @@ import { generateMetadata } from '@/lib/utils/metadata';
 import { imageService } from '@/services/image/imageService';
 import { ImageFormat } from '@/lib/types/image';
 
-export const metadata: Metadata = generateMetadata('/image/converter');
-
 export default function ImageConverter() {
   const [image, setImage] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
-  const [format, setFormat] = useState('png');
+  const [format, setFormat] = useState<ImageFormat>('png');
   const [quality, setQuality] = useState(90);
   const [converting, setConverting] = useState(false);
   const [progress, setProgress] = useState(0);

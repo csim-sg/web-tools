@@ -8,7 +8,6 @@ interface ExchangeRates {
   [key: string]: number;
 }
 
-export const metadata: Metadata = generateMetadata('/popular/currency');
 
 export default function CurrencyConverter() {
   const [amount, setAmount] = useState<string>('1');
