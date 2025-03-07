@@ -57,9 +57,9 @@ jobs:
       - name: Execute Ansible Playbook - Steady
         uses: DailyVanity/ansible-playbook-docker-action@master
         with:
-          playbookName: '.ansible/deployment.yml'
-          inventoryFile: '.ansible/inventories/steady/hosts'
-          requirementsFile: '.ansible/requirements-ci.yml'
+          playbookName: '.github/ansible/deployment.yml'
+          inventoryFile: '.github/ansible/inventories/steady/hosts'
+          requirementsFile: '.github/ansible/requirements-ci.yml'
           extraVars: |
             -e DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }} 
             -e DOCKER_PASSWORD=${{ secrets.DOCKER_PASSWORD }} 
