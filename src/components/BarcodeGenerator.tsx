@@ -37,7 +37,7 @@ interface BarcodeGeneratorProps {
   type: 'qr' | 'code128' | 'ean13' | 'upca' | 'code39' | 'datamatrix' | 'pdf417';
   title: string;
   description: string;
-  validator?: (value: string) => boolean;
+  validator?: (value: string) => Promise<boolean>;
   placeholder?: string;
   maxLength?: number;
 }
@@ -62,10 +62,13 @@ export default function BarcodeGenerator({
 
   const generateBarcode = async (values: BarcodeFormValues) => {
     try {
-      if (validator && !validator(values.content)) {
-        showToast('Invalid input format', 'error');
-        setBarcodeUrl('');
-        return;
+      if (validator) {
+        const isValid = await validator(values.content);
+        if (!isValid) {
+          showToast('Invalid input format', 'error');
+          setBarcodeUrl('');
+          return;
+        }
       }
 
       const response = await fetch('/api/barcode/generate', {

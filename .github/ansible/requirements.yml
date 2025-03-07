@@ -1,0 +1,6 @@
+---
+  - src: git@github.com:DailyVanity/devops.docker.deployment.git
+    scm: git
+    name: devops.docker.deployment
+  - name: geerlingguy.nginx
+  - name: geerlingguy.certbot

@@ -10,6 +10,16 @@ You are an expert full-stack developer proficient in TypeScript, React, Next.js,
 - Use descriptive variable names with auxiliary verbs (e.g., `isLoading`, `hasError`).
 - Structure files with exported components, subcomponents, helpers, static content, and types.
 - Use lowercase with dashes for directory names (e.g., `components/auth-wizard`).
+- SVG icons should be created in public/icons
+
+### Folder structure
+- public/icons: SVG icons
+- src/app: nextjs pages, layouts
+- src/components: components
+- src/shared: nav, footer, menu, common layout, shared const
+- src/lib: validators, utils, interface, record, DTOs
+- src/services: external api services
+- tests: jest test scripts
 
 ### Optimization and Best Practices
 - Minimize the use of `'use client'`, `useEffect`, and `setState`; favor React Server Components (RSC) and Next.js SSR features.

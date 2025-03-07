@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { FluidMenu } from "@/components/ui/fluid-menu";
 
-const navigationItems = [
-  { href: "/utilities/calculator", label: "Calculator" },
-  { href: "/utilities/currency", label: "Currency" },
-  { href: "/games/mtg", label: "MTG Tools" },
-  { href: "/image", label: "Image Tools" },
-  { href: "/video", label: "Video Tools" },
-  { href: "/pdf", label: "PDF Tools" },
+const navItems = [
+  { href: "/popular", label: "Popular" },
+  { href: "/image", label: "Image" },
+  { href: "/video", label: "Video" },
+  { href: "/pdf", label: "PDF" },
+  { href: "/barcode", label: "Barcode" },
+  { href: "/text", label: "Text" },
 ];
 
 const Navbar = () => {
@@ -18,7 +18,7 @@ const Navbar = () => {
           <Link href="/" className="text-xl font-bold">
             Web Utilities
           </Link>
-          <FluidMenu items={navigationItems} />
+          <FluidMenu items={navItems} />
         </div>
       </div>
     </nav>

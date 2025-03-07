@@ -1,0 +1,72 @@
+name: Deployment to Steady server
+
+on: 
+  push:
+    tags:
+      - v**-sp*
+      - V**-sp*
+env:
+  docker: monkeymon/web-tools
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: steady
+    steps:
+    - uses: actions/checkout@v3
+    # - name: Use Node.js
+    #   uses: actions/setup-node@v3
+    #   with:
+    #     node-version: 20
+    # - name: npm install, build
+    #   run: |
+    #     npm install
+    #     npm run build
+    - name: Extract branch name
+      shell: bash
+      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF##*/})"
+      id: extract_branch
+    # - name: Download prod only node_modules
+    #   run: |
+    #     rm -rf node_modules
+    #     npm install --only=prod
+    - name: Build and Push image
+      uses: DailyVanity/Publish-Docker-Github-Action@master
+      with:
+        name: ${{ env.docker }}
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        dockerfile: Dockerfile
+        tags: "latest,${{ steps.extract_branch.outputs.branch }}"
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v3
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF##*/})"
+        id: extract_branch
+      - name: Setup SOPS
+        uses: nhedger/setup-sops@v2
+      - name: Run SOPS
+        run: |
+          cd .github && make decrypt
+        env: 
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_ACCESS_SECRET }}
+      - name: Execute Ansible Playbook - Steady
+        uses: DailyVanity/ansible-playbook-docker-action@master
+        with:
+          playbookName: '.ansible/deployment.yml'
+          inventoryFile: '.ansible/inventories/steady/hosts'
+          requirementsFile: '.ansible/requirements-ci.yml'
+          extraVars: |
+            -e DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }} 
+            -e DOCKER_PASSWORD=${{ secrets.DOCKER_PASSWORD }} 
+            -e DOCKER_REPO_TAG=${{ steps.extract_branch.outputs.branch }} 
+            -e PROJECT_TAG=${{ steps.extract_branch.outputs.branch }}
+            -e DOCKER_REPO=${{ env.docker }}
+          galaxyGithubUser: ${{ secrets.GIT_USERNAME }}
+          galaxyGithubToken: ${{ secrets.GIT_PASSWORD }}
+          rolesPath: ".github/ansible/roles"
+          key: ${{ secrets.CI_PRIVATE_KEY }}
