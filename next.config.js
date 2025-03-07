@@ -29,6 +29,8 @@ const nextConfig = {
   // Add this to handle WASM files
   experimental: {
     asyncWebAssembly: true,
+    webVitalsAttribution: ['CLS', 'LCP'],
+    output: 'standalone',
   }
 };
 
