@@ -120,6 +120,34 @@ export const pdfTools: Tool[] = [
     tags: ['convert', 'powerpoint', 'pptx']
   },
   {
+    name: 'Word to PDF',
+    description: 'Convert Word documents to PDF format',
+    icon: '/icons/word-pdf.svg',
+    href: '/pdf/word-to-pdf',
+    tags: ['convert', 'word', 'doc', 'docx', 'pdf']
+  },
+  {
+    name: 'PowerPoint to PDF',
+    description: 'Convert PowerPoint presentations to PDF format',
+    icon: '/icons/ppt-pdf.svg',
+    href: '/pdf/powerpoint-to-pdf',
+    tags: ['convert', 'powerpoint', 'pptx', 'pdf']
+  },
+  {
+    name: 'Image to PDF',
+    description: 'Convert images to PDF documents',
+    icon: '/icons/image-pdf.svg',
+    href: '/pdf/image-to-pdf',
+    tags: ['convert', 'image', 'jpg', 'png', 'pdf']
+  },
+  {
+    name: 'PDF to Image',
+    description: 'Extract images from PDF or convert pages to images',
+    icon: '/icons/pdf-image.svg',
+    href: '/pdf/to-image',
+    tags: ['convert', 'extract', 'image', 'jpg', 'png']
+  },
+  {
     name: 'Merge PDF',
     description: 'Combine multiple PDF files into one document',
     icon: '/icons/merge.svg',
