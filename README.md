@@ -1,8 +1,33 @@
 # Web Utilities
 
-A collection of free online tools and utilities built with Next.js 14, TypeScript, and Tailwind CSS & ShadcnUI.
+A collection of free online tools and utilities built with Next.js 15, TypeScript, and Tailwind CSS & ShadcnUI.
 
 ## 🛠️ Tools Available
+
+### PDF Tools
+
+- PDF to Image Converter
+  - Supports PNG, JPEG, WebP output formats
+  - Custom DPI and quality settings
+  - Page selection (all, range, custom)
+  - Batch processing with ZIP output
+  - Embedded image extraction
+- PDF to Word Converter
+  - Maintains formatting and layout
+  - Supports tables and images
+  - Multiple output formats (DOCX, RTF)
+- PDF Merger
+  - Drag-and-drop interface
+  - Page reordering
+  - Custom page selection
+- PDF Splitter
+  - Split by page ranges
+  - Extract specific pages
+  - Batch processing
+- PDF Compressor
+  - Multiple compression levels
+  - Quality-size optimization
+  - Batch processing support
 
 ### Image Tools
 
@@ -20,15 +45,6 @@ A collection of free online tools and utilities built with Next.js 14, TypeScrip
 - Video Compressor
 - Video Trimmer
 - GIF Creator
-
-### PDF Tools
-
-- PDF to Word
-- PDF to Excel
-- PDF to PowerPoint
-- Merge PDF
-- Split PDF
-- Compress PDF
 
 ### Barcode Tools
 
@@ -53,9 +69,40 @@ A collection of free online tools and utilities built with Next.js 14, TypeScrip
 - Currency Converter
 - Unit Converter
 
+## 📝 Changelog
+
+### v1.1.0 (2024-03-08)
+- ✨ Added PDF to Image converter with advanced features
+  - Multiple output formats (PNG, JPEG, WebP)
+  - Custom DPI and quality settings
+  - Page selection and preview
+  - ZIP output option
+  - Embedded image extraction
+- 🔧 Enhanced PDF processing capabilities
+  - Improved error handling
+  - Better progress tracking
+  - Optimized file handling
+- 🎨 UI/UX Improvements
+  - Added thumbnail previews for PDF pages
+  - Enhanced drag-and-drop interface
+  - Improved responsive design
+
+### v1.0.0 (2024-03-07)
+- 🚀 Initial release
+- ✨ Core PDF tools implementation
+  - PDF to Word converter
+  - PDF Merger
+  - PDF Splitter
+  - PDF Compressor
+- 🎨 Implemented base UI components with ShadcnUI
+- 🔧 Set up project infrastructure
+  - Next.js 15 setup
+  - TypeScript configuration
+  - Tailwind CSS integration
+
 ## 🔧 Technology Stack
 
-- **Framework**: Next.js 14
+- **Framework**: Next.js 15
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS
 - **State Management**: React Hooks
@@ -64,26 +111,6 @@ A collection of free online tools and utilities built with Next.js 14, TypeScrip
 - **PDF Processing**: pdf-lib
 - **Barcode Generation**: bwip-js, qrcode
 - **Video Processing**: FFmpeg
-
-## 📦 Dependencies
-
-```json
-{
-  "dependencies": {
-    "next": "14.x",
-    "react": "18.x",
-    "react-dom": "18.x",
-    "typescript": "5.x",
-    "tailwindcss": "3.x",
-    "sharp": "^0.32.0",
-    "pdf-lib": "^1.17.1",
-    "bwip-js": "^3.4.0",
-    "qrcode": "^1.5.3",
-    "react-dropzone": "^14.2.3",
-    "next-themes": "^0.2.1"
-  }
-}
-```
 
 ## 🚀 Getting Started
 
