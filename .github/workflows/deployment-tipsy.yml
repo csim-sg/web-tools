@@ -46,21 +46,28 @@ jobs:
         shell: bash
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF##*/})"
         id: extract_branch
-      - name: Execute Ansible Playbook - Tipsy
+      - name: Setup SOPS
+        uses: nhedger/setup-sops@v2
+      - name: Run SOPS
+        run: |
+          cd .github && make decrypt
+        env: 
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_ACCESS_SECRET }}
+      - name: Execute Ansible Playbook - Steady
         uses: DailyVanity/ansible-playbook-docker-action@master
         with:
-          playbookName: '.ansible/deployment.yml'
-          inventoryFile: '.ansible/inventories/tipsy/hosts'
-          requirementsFile: '.ansible/requirements-ci.yml'
-          key: ${{ secrets.CI_PRIVATE_KEY }}
-          keyFileVaultPass: ${{ secrets.ANSIBLE_VAULT_PASS }}
+          playbookName: '.github/ansible/deployment.yml'
+          inventoryFile: '.github/ansible/inventories/steady/hosts'
+          requirementsFile: '.github/ansible/requirements-ci.yml'
           extraVars: |
             -e DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }} 
             -e DOCKER_PASSWORD=${{ secrets.DOCKER_PASSWORD }} 
             -e DOCKER_REPO_TAG=${{ steps.extract_branch.outputs.branch }} 
             -e PROJECT_TAG=${{ steps.extract_branch.outputs.branch }}
-            -e DOCKER_REPO=${{ env.docker}}
+            -e DOCKER_REPO=${{ env.docker }}
           galaxyGithubUser: ${{ secrets.GIT_USERNAME }}
           galaxyGithubToken: ${{ secrets.GIT_PASSWORD }}
-          rolesPath: ".ansible/roles"
+          rolesPath: ".github/ansible/roles"
+          key: ${{ secrets.CI_PRIVATE_KEY }}
 

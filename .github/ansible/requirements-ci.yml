@@ -1,6 +1,7 @@
 ---
   - src: https://$INPUT_GALAXYGITHUBUSER:$INPUT_GALAXYGITHUBTOKEN@github.com/DailyVanity/devops.docker.deployment.git
     name: devops.docker.deployment
+    version: no-roles
   - src: https://$INPUT_GALAXYGITHUBUSER:$INPUT_GALAXYGITHUBTOKEN@github.com/geerlingguy/ansible-role-nginx
     name: geerlingguy.nginx
   - src: https://$INPUT_GALAXYGITHUBUSER:$INPUT_GALAXYGITHUBTOKEN@github.com/geerlingguy/ansible-role-certbot
