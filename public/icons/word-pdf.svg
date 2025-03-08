@@ -1,0 +1,21 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Word Document (Left Side) -->
+  <rect x="2" y="4" width="10" height="16" rx="1" fill="#2B579A" />
+  <path d="M5 10L9 10" stroke="white" stroke-width="1" stroke-linecap="round" />
+  <path d="M5 13L9 13" stroke="white" stroke-width="1" stroke-linecap="round" />
+  <path d="M5 16L9 16" stroke="white" stroke-width="1" stroke-linecap="round" />
+  <path d="M5 7L7 7" stroke="white" stroke-width="1" stroke-linecap="round" />
+  
+  <!-- Arrow -->
+  <path d="M14 12H18" stroke="#666666" stroke-width="1.5" stroke-linecap="round" />
+  <path d="M16 9L19 12L16 15" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+  
+  <!-- PDF (Right Side) -->
+  <rect x="20" y="4" width="10" height="16" rx="1" transform="translate(-8 0)" fill="#F40F02" />
+  <path d="M15.5 8.5C15.5 8.5 16 7 17.25 7C18.5 7 18.5 8.5 18.5 8.5V9.5C18.5 9.5 18.5 11 17.25 11C16 11 15.5 9.5 15.5 9.5V8.5Z" stroke="white" stroke-width="0.75" fill="none" />
+  <path d="M13 7V11M13 7H14M13 11H14" stroke="white" stroke-width="0.75" />
+  <path d="M19 7V11C19 11 20.5 11 21 11C21.5 11 22 10.5 22 9.5V8.5C22 7.5 21.5 7 21 7C20.5 7 19 7 19 7Z" stroke="white" stroke-width="0.75" fill="none" />
+  <path d="M13 13L22 13" stroke="white" stroke-width="0.75" stroke-linecap="round" />
+  <path d="M13 15L20 15" stroke="white" stroke-width="0.75" stroke-linecap="round" />
+  <path d="M13 17L18 17" stroke="white" stroke-width="0.75" stroke-linecap="round" />
+</svg> 

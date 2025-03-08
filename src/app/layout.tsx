@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { ToastProvider } from "@/components/providers/toast-provider";
+import { GoogleTagManager } from '@next/third-parties/google'
 import { Header } from "@/components/shared/Header";
 import { Footer } from "@/components/shared/Footer";
 import "./globals.css";
+import { env } from "@/config/env";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -68,6 +70,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <GoogleTagManager gtmId={env.google.tagManager} />
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />

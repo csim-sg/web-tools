@@ -1,0 +1,23 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- PDF (Left Side) -->
+  <rect x="2" y="4" width="10" height="16" rx="1" fill="#F40F02" />
+  <path d="M4.5 8.5C4.5 8.5 5 7 6.25 7C7.5 7 7.5 8.5 7.5 8.5V9.5C7.5 9.5 7.5 11 6.25 11C5 11 4.5 9.5 4.5 9.5V8.5Z" stroke="white" stroke-width="0.75" fill="none" />
+  <path d="M2 7V11M2 7H3M2 11H3" stroke="white" stroke-width="0.75" />
+  <path d="M8 7V11C8 11 9.5 11 10 11C10.5 11 11 10.5 11 9.5V8.5C11 7.5 10.5 7 10 7C9.5 7 8 7 8 7Z" stroke="white" stroke-width="0.75" fill="none" />
+  <path d="M3 13L11 13" stroke="white" stroke-width="0.75" stroke-linecap="round" />
+  <path d="M3 15L9 15" stroke="white" stroke-width="0.75" stroke-linecap="round" />
+  <path d="M3 17L7 17" stroke="white" stroke-width="0.75" stroke-linecap="round" />
+  
+  <!-- Arrow -->
+  <path d="M14 12H18" stroke="#666666" stroke-width="1.5" stroke-linecap="round" />
+  <path d="M16 9L19 12L16 15" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+  
+  <!-- Image (Right Side) -->
+  <rect x="20" y="4" width="10" height="16" rx="1" transform="translate(-8 0)" fill="#4CAF50" />
+  <rect x="13.5" y="5.5" width="7" height="5" rx="0.5" fill="white" />
+  <circle cx="15" cy="7.5" r="1" fill="#4CAF50" />
+  <path d="M14 12L16 10L20 14" stroke="white" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M18 12L20 10L21 11" stroke="white" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M14 17L20 17" stroke="white" stroke-width="1" stroke-linecap="round" />
+  <path d="M14 19L18 19" stroke="white" stroke-width="1" stroke-linecap="round" />
+</svg> 

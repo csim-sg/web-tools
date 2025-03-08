@@ -1,4 +1,7 @@
 interface EnvConfig {
+  google: {
+    tagManager: string
+  },
   api: {
     exchangeRate: string;
     translation: string;
@@ -25,6 +28,9 @@ const getEnvVar = (key: string, defaultValue?: string): string => {
 };
 
 export const env: EnvConfig = {
+  google: {
+    tagManager: getEnvVar('NEXT_PUBLIC_TAG_MANAGER_KEY', ''),
+  },
   api: {
     exchangeRate: getEnvVar('NEXT_PUBLIC_EXCHANGE_RATE_API_URL', 'https://api.exchangerate-api.com/v4'),
     translation: getEnvVar('NEXT_PUBLIC_TRANSLATION_API_URL', 'https://translation-api.example.com'),
