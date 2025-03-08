@@ -49,3 +49,5 @@ docker-compose.override.yml
 .env.local
 .env.*.local
 .sops.yaml
+# Sentry Config File
+.env.sentry-build-plugin

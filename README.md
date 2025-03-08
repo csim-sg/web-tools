@@ -71,7 +71,73 @@ A collection of free online tools and utilities built with Next.js 15, TypeScrip
 
 ## 📝 Changelog
 
-### v1.1.0 (2024-03-08)
+### v1.2.2 (2024-03-XX)
+- 🔧 Major Image Processing Tools Update
+  - Fixed and optimized all image processing components
+    - Improved ImageConverter with better format handling
+    - Enhanced RemoveBackground with optimized processing
+    - Updated ImageResizer with better aspect ratio control
+    - Refined ImageEffects with real-time preview
+  - Improved error handling and progress tracking
+  - Added better type safety and validation
+- 📊 Analytics & Error Tracking Integration
+  - Added Sentry.io integration for error tracking
+    - Real-time error monitoring and reporting
+    - Performance monitoring
+    - User session tracking
+    - Custom error boundaries
+  - Implemented Google Analytics 4
+    - Enhanced event tracking
+    - User behavior analytics
+    - Custom conversion tracking
+    - Page performance metrics
+- 🎨 UI/UX Refinements
+  - Enhanced preview functionality across all tools
+  - Improved responsive design for mobile devices
+  - Added better loading states and progress indicators
+  - Updated error messages with more helpful information
+- 🔍 Performance Optimizations
+  - Improved image processing efficiency
+  - Better memory management for large files
+  - Reduced unnecessary re-renders
+  - Optimized file handling and cleanup
+
+### v1.2.0 (2024-03-XX)
+- ✨ Enhanced Image Processing Tools
+  - Implemented advanced image converter with multiple format support
+    - Support for PNG, JPEG, WebP, and AVIF formats
+    - Quality control and optimization
+    - Real-time preview
+  - Added powerful background removal tool
+    - AI-powered background removal
+    - High-quality and fast processing modes
+    - Transparency preservation
+  - Implemented comprehensive image resizer
+    - Custom dimensions with aspect ratio preservation
+    - Preset sizes (HD, 4K, etc.)
+    - Batch resizing capability
+  - Added image effects processor
+    - Multiple effects: grayscale, blur, sepia, invert
+    - Adjustable intensity controls
+    - Real-time effect preview
+  - Improved image compression
+    - Advanced compression algorithms
+    - Quality-size balance control
+    - Format-specific optimizations
+- 🔧 Technical Improvements
+  - Integrated Sharp.js for high-performance image processing
+  - Added @imgly/background-removal for AI-powered background removal
+  - Implemented canvas-based image manipulation
+  - Added batch processing with ZIP output
+  - Improved error handling and progress tracking
+- 🎨 UI/UX Enhancements
+  - Added real-time preview for image effects
+  - Improved drag-and-drop interface
+  - Added progress indicators for all processes
+  - Enhanced responsive design for all screen sizes
+  - Added success/error notifications
+
+### v1.1.0 (2024-03-XX)
 - ✨ Added PDF to Image converter with advanced features
   - Multiple output formats (PNG, JPEG, WebP)
   - Custom DPI and quality settings
@@ -87,7 +153,7 @@ A collection of free online tools and utilities built with Next.js 15, TypeScrip
   - Enhanced drag-and-drop interface
   - Improved responsive design
 
-### v1.0.0 (2024-03-07)
+### v1.0.0 (2024-03-XX)
 - 🚀 Initial release
 - ✨ Core PDF tools implementation
   - PDF to Word converter
@@ -96,9 +162,34 @@ A collection of free online tools and utilities built with Next.js 15, TypeScrip
   - PDF Compressor
 - 🎨 Implemented base UI components with ShadcnUI
 - 🔧 Set up project infrastructure
-  - Next.js 15 setup
+  - Next.js 14 setup
   - TypeScript configuration
   - Tailwind CSS integration
+
+## 📦 Dependencies
+
+```json
+{
+  "dependencies": {
+    "next": "14.x",
+    "react": "18.x",
+    "react-dom": "18.x",
+    "typescript": "5.x",
+    "tailwindcss": "3.x",
+    "sharp": "^0.33.2",
+    "pdf-lib": "^1.17.1",
+    "canvas": "^2.11.2",
+    "file-saver": "^2.0.5",
+    "jszip": "^3.10.1",
+    "@imgly/background-removal": "^1.4.5",
+    "image-js": "^0.35.5",
+    "bwip-js": "^3.4.0",
+    "qrcode": "^1.5.3",
+    "react-dropzone": "^14.2.3",
+    "next-themes": "^0.2.1"
+  }
+}
+```
 
 ## 🔧 Technology Stack
 

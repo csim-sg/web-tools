@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { BackgroundRemover } from '@/components/tools/image/BackgroundRemover';
+import { RemoveBackground } from '@/components/tools/image/RemoveBackground';
 
 export const metadata: Metadata = {
   title: 'Background Remover - WebTools',
@@ -11,15 +11,16 @@ export const metadata: Metadata = {
   },
 };
 
-export default function BackgroundRemoverPage() {
+export default function RemoveBackgroundPage() {
   return (
-    <div className="container mx-auto py-8 px-4">
-      <div className="max-w-3xl mx-auto">
-        <h1 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-8">
-          Background Remover
-        </h1>
-        <BackgroundRemover />
+    <div className="container mx-auto p-6 space-y-6">
+      <div className="space-y-2">
+        <h1 className="text-2xl font-bold">Background Remover</h1>
+        <p className="text-muted-foreground">
+          Remove backgrounds from images automatically with AI
+        </p>
       </div>
+      <RemoveBackground />
     </div>
   );
 } 

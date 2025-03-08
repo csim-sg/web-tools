@@ -1,4 +1,3 @@
-'use server'
 import { Metadata } from 'next';
 import { PDFMerger } from '@/components/tools/pdf/pdf-merger';
 

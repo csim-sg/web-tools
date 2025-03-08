@@ -11,18 +11,16 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ImageResizerPage() {
+export default function ImageResizePage() {
   return (
-    <div className="container mx-auto py-8 px-4">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-8">
-          Image Resizer
-        </h1>
-        <p className="text-center text-gray-600 dark:text-gray-400 mb-8">
-          Resize your images to exact dimensions while maintaining quality
+    <div className="container mx-auto p-6 space-y-6">
+      <div className="space-y-2">
+        <h1 className="text-2xl font-bold">Image Resizer</h1>
+        <p className="text-muted-foreground">
+          Resize images to specific dimensions while maintaining aspect ratio
         </p>
-        <ImageResizer />
       </div>
+      <ImageResizer />
     </div>
   );
 }

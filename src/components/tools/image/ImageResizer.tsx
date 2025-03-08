@@ -1,217 +1,260 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
-import {default as NextImage} from 'next/image';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
+import { FileIcon, Download, Image as ImageIcon } from 'lucide-react';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Switch } from '@/components/ui/switch';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { resizeImage, formatFileSize } from '@/lib/utils/image-utils';
+import { saveAs } from 'file-saver';
+
+type ResizeMode = 'custom' | 'preset';
+type PresetSize = '640x480' | '1280x720' | '1920x1080' | '3840x2160';
 
 export function ImageResizer() {
-  const [image, setImage] = useState<string | null>(null);
-  const [originalDimensions, setOriginalDimensions] = useState({ width: 0, height: 0 });
-  const [width, setWidth] = useState(800);
-  const [height, setHeight] = useState(600);
+  const [file, setFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string>('');
+  const [processing, setProcessing] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [resizeMode, setResizeMode] = useState<ResizeMode>('custom');
+  const [width, setWidth] = useState<number>(0);
+  const [height, setHeight] = useState<number>(0);
   const [maintainAspectRatio, setMaintainAspectRatio] = useState(true);
-  const [resizedImage, setResizedImage] = useState<string | null>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [presetSize, setPresetSize] = useState<PresetSize>('1280x720');
+  const [originalDimensions, setOriginalDimensions] = useState<{ width: number; height: number } | null>(null);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: {
       'image/*': ['.png', '.jpg', '.jpeg', '.webp']
     },
     maxFiles: 1,
-    onDrop: (acceptedFiles) => {
-      const file = acceptedFiles[0];
-      const url = URL.createObjectURL(file);
-      setImage(url);
-
-      // Get original dimensions
-      const img = new Image();
-      img.onload = () => {
-        setOriginalDimensions({ width: img.width, height: img.height });
-        setWidth(img.width);
-        setHeight(img.height);
-      };
-      img.src = url;
+    onDrop: async (acceptedFiles) => {
+      if (acceptedFiles.length > 0) {
+        const file = acceptedFiles[0];
+        setFile(file);
+        
+        // Get image dimensions
+        const img = new Image();
+        img.onload = () => {
+          setOriginalDimensions({ width: img.width, height: img.height });
+          setWidth(img.width);
+          setHeight(img.height);
+        };
+        img.src = URL.createObjectURL(file);
+        setPreview(img.src);
+      }
     }
   });
 
-  // Handle aspect ratio
+  // Update dimensions when preset size changes
   useEffect(() => {
-    if (maintainAspectRatio && originalDimensions.width > 0) {
-      const aspectRatio = originalDimensions.width / originalDimensions.height;
-      if (width !== originalDimensions.width) {
-        setHeight(Math.round(width / aspectRatio));
-      } else {
-        setWidth(Math.round(height * aspectRatio));
-      }
+    if (resizeMode === 'preset') {
+      const [w, h] = presetSize.split('x').map(Number);
+      setWidth(w);
+      setHeight(h);
     }
-  }, [width, height, maintainAspectRatio, originalDimensions]);
+  }, [presetSize, resizeMode]);
 
-  // Cleanup function for object URLs
+  // Update height when width changes and maintain aspect ratio
   useEffect(() => {
-    return () => {
-      if (image) URL.revokeObjectURL(image);
-      if (resizedImage) URL.revokeObjectURL(resizedImage);
-    };
-  }, [image, resizedImage]);
+    if (maintainAspectRatio && originalDimensions && width > 0) {
+      const ratio = originalDimensions.width / originalDimensions.height;
+      setHeight(Math.round(width / ratio));
+    }
+  }, [width, maintainAspectRatio, originalDimensions]);
 
-  const handleResize = () => {
-    if (!image || !canvasRef.current) return;
+  const handleResize = async () => {
+    if (!file) return;
+    setProcessing(true);
+    setProgress(0);
 
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+    try {
+      const result = await resizeImage(file, {
+        width,
+        height,
+        maintainAspectRatio,
+        quality: 90
+      });
 
-    const img = new Image();
-    img.onload = () => {
-      canvas.width = width;
-      canvas.height = height;
-      
-      // Use better quality settings
-      ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = 'high';
-      
-      ctx.drawImage(img, 0, 0, width, height);
-      
-      // Convert to blob for better quality
-      canvas.toBlob((blob) => {
-        if (blob) {
-          const url = URL.createObjectURL(blob);
-          if (resizedImage) URL.revokeObjectURL(resizedImage);
-          setResizedImage(url);
-        }
-      }, 'image/png', 1.0);
-    };
+      if (!result.success || !result.processedBlob) {
+        throw new Error(result.message || 'Resize failed');
+      }
 
-    img.src = image;
+      // Save the resized image
+      const dimensions = `${width}x${height}`;
+      const addingFileName = file.name.match(/\.[^/.]+$/)
+      const newFileName = file.name.replace(/\.[^/.]+$/, `-${dimensions}${addingFileName && addingFileName.length>0?addingFileName[0]: ""}`);
+      saveAs(result.processedBlob, newFileName);
+
+      // Show success message
+      alert(`Image resized successfully!\nNew dimensions: ${width}x${height}`);
+
+    } catch (error) {
+      console.error('Resize failed:', error);
+      alert(error instanceof Error ? error.message : 'Failed to resize image');
+    } finally {
+      setProcessing(false);
+      setProgress(0);
+    }
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-      {!image ? (
-        <div
-          {...getRootProps()}
-          className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors
+    <div className="grid md:grid-cols-2 gap-6">
+      <Card className="p-6">
+        <div 
+          {...getRootProps()} 
+          className={`border-2 border-dashed rounded-lg p-12 text-center cursor-pointer transition-colors
             ${isDragActive 
-              ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' 
+              ? 'border-primary bg-primary/5' 
               : 'border-gray-300 dark:border-gray-600'}`}
         >
           <input {...getInputProps()} />
-          <div className="space-y-2">
-            <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-            <p className="text-gray-600 dark:text-gray-300">
-              Drag & drop an image here, or click to select
-            </p>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              Supports PNG, JPG, JPEG, WebP
+          <div className="flex flex-col items-center gap-2">
+            <ImageIcon className="w-12 h-12 text-muted-foreground" />
+            <p>Drag & drop an image here, or click to select</p>
+            <p className="text-sm text-muted-foreground">
+              Supports PNG, JPG, WEBP
             </p>
           </div>
         </div>
-      ) : (
-        <div className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">Original Image</h3>
-              <div className="relative aspect-video bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
-                <NextImage
-                  src={image}
-                  alt="Original"
-                  fill
-                  className="object-contain"
-                />
-                <div className="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded">
-                  {originalDimensions.width} x {originalDimensions.height}
+      </Card>
+
+      <Card className="p-6 space-y-6">
+        {file ? (
+          <>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <FileIcon className="h-8 w-8 text-primary" />
+                <div>
+                  <h3 className="font-medium">{file.name}</h3>
+                  <p className="text-sm text-muted-foreground">
+                    {formatFileSize(file.size)}
+                  </p>
+                  {originalDimensions && (
+                    <p className="text-sm text-muted-foreground">
+                      Original: {originalDimensions.width}x{originalDimensions.height}
+                    </p>
+                  )}
                 </div>
               </div>
+              <Button 
+                variant="outline" 
+                onClick={() => {
+                  setFile(null);
+                  setPreview('');
+                  setOriginalDimensions(null);
+                }}
+              >
+                Change File
+              </Button>
             </div>
-            
-            <div>
-              <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">Resized Image</h3>
-              <div className="relative aspect-video bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
-                {resizedImage ? (
-                  <>
-                    <NextImage
-                      src={resizedImage}
-                      alt="Resized"
-                      fill
-                      className="object-contain"
+
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label>Resize Mode</Label>
+                <Select value={resizeMode} onValueChange={(value: ResizeMode) => setResizeMode(value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select mode" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="custom">Custom Size</SelectItem>
+                    <SelectItem value="preset">Preset Size</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {resizeMode === 'preset' ? (
+                <div className="space-y-2">
+                  <Label>Preset Size</Label>
+                  <Select value={presetSize} onValueChange={(value: PresetSize) => setPresetSize(value)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select size" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="640x480">640x480 (VGA)</SelectItem>
+                      <SelectItem value="1280x720">1280x720 (HD)</SelectItem>
+                      <SelectItem value="1920x1080">1920x1080 (Full HD)</SelectItem>
+                      <SelectItem value="3840x2160">3840x2160 (4K)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Width (px)</Label>
+                    <Input
+                      type="number"
+                      value={width}
+                      onChange={(e) => setWidth(Number(e.target.value))}
                     />
-                    <div className="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded">
-                      {width} x {height}
-                    </div>
-                  </>
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-gray-500 dark:text-gray-400">
-                    Click resize to see result
                   </div>
-                )}
+                  <div className="space-y-2">
+                    <Label>Height (px)</Label>
+                    <Input
+                      type="number"
+                      value={height}
+                      onChange={(e) => setHeight(Number(e.target.value))}
+                      disabled={maintainAspectRatio}
+                    />
+                  </div>
+                </div>
+              )}
+
+              <div className="flex items-center space-x-2">
+                <Switch
+                  id="aspect-ratio"
+                  checked={maintainAspectRatio}
+                  onCheckedChange={setMaintainAspectRatio}
+                />
+                <Label htmlFor="aspect-ratio">Maintain Aspect Ratio</Label>
               </div>
             </div>
-          </div>
-          
-          <div className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <label className="block">
-                <span className="text-gray-700 dark:text-gray-300">Width (px)</span>
-                <input
-                  type="number"
-                  value={width}
-                  onChange={(e) => setWidth(Number(e.target.value))}
-                  className="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 shadow-sm"
-                  min="1"
-                />
-              </label>
-              
-              <label className="block">
-                <span className="text-gray-700 dark:text-gray-300">Height (px)</span>
-                <input
-                  type="number"
-                  value={height}
-                  onChange={(e) => setHeight(Number(e.target.value))}
-                  className="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 shadow-sm"
-                  min="1"
-                />
-              </label>
-            </div>
-            
-            <label className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                checked={maintainAspectRatio}
-                onChange={(e) => setMaintainAspectRatio(e.target.checked)}
-                className="rounded border-gray-300 dark:border-gray-600 text-blue-600"
-              />
-              <span className="text-gray-700 dark:text-gray-300">Maintain aspect ratio</span>
-            </label>
-            
-            <div className="flex space-x-4">
-              <button
+
+            {processing ? (
+              <div className="space-y-2">
+                <Progress value={progress} />
+                <p className="text-sm text-center text-muted-foreground">
+                  Processing... {Math.round(progress)}%
+                </p>
+              </div>
+            ) : (
+              <Button
+                className="w-full"
                 onClick={handleResize}
-                className="flex-1 py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white rounded-md transition-colors"
+                disabled={!file}
               >
-                Resize
-              </button>
-              
-              {resizedImage && (
-                <button
-                  onClick={() => {
-                    const a = document.createElement('a');
-                    a.href = resizedImage;
-                    a.download = 'resized-image.png';
-                    a.click();
-                  }}
-                  className="flex-1 py-2 px-4 bg-green-500 hover:bg-green-600 text-white rounded-md transition-colors"
-                >
-                  Download
-                </button>
-              )}
+                <Download className="w-4 h-4 mr-2" />
+                Resize & Download
+              </Button>
+            )}
+          </>
+        ) : (
+          <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
+            <p>Select an image to start resizing</p>
+          </div>
+        )}
+      </Card>
+
+      {preview && (
+        <Card className="p-6 md:col-span-2">
+          <div className="space-y-2">
+            <Label>Preview</Label>
+            <div className="rounded-lg overflow-hidden border bg-background">
+              <img
+                src={preview}
+                alt="Preview"
+                className="max-w-full h-auto mx-auto"
+                style={{ maxHeight: '400px' }}
+              />
             </div>
           </div>
-        </div>
+        </Card>
       )}
-      
-      <canvas ref={canvasRef} style={{ display: 'none' }} />
     </div>
   );
 } 
